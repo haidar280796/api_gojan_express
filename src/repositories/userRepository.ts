@@ -1,4 +1,5 @@
-import User from "../models/user.model";
+import { Transaction } from "sequelize";
+import User from "../models/userModel";
 import userType from "../types/userTypes";
 
 const getAll = async () => {
@@ -12,26 +13,28 @@ const getAll = async () => {
 
 const getById = async (userId: any) => {
     try {
-        const users = await User.findByPk(userId);
-        return users;
+        const user = await User.findByPk(userId);
+        return user;
     } catch (error) {
         throw new Error(`${error}`);
     }
 }
 
-const save = async (reqData: userType) => {
+const save = async (reqData: userType, t?: Transaction) => {
     try {
-        const users = await User.create(reqData);
-        return users;
+        const user = await User.create(reqData, {
+            transaction: t
+        });
+        return user;
     } catch (error) {
         throw new Error(`${error}`);
     }
 }
 
-const userService = {
+const userRepository = {
     getAll,
     getById,
     save,
 }
 
-export default userService;
+export default userRepository;

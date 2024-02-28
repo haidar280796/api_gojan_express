@@ -1,10 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../connection/db";
 
-// class CounterId extends Model {
-//     declare counter_id: string;
-// }
-
 const CounterId = sequelize.define('CounterId', {
     counter_id: {
         type: DataTypes.STRING(30),

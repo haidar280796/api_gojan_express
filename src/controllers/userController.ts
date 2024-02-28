@@ -8,6 +8,7 @@ import { UniqueConstraintError } from "sequelize";
 
 const COUNTER_PREFIX = 'U';
 const COUNTER_ID = 'mst_user';
+const ROLES = ['admin', 'cashier', 'customer'];
 
 const getUsers = async (req: Request, res: Response) => {
     try {
@@ -33,6 +34,10 @@ const getUser = async (req: Request, res: Response) => {
 }
 
 const createUser = async (req: Request, res: Response) => {
+    if (ROLES.indexOf(req.body.role) < 0) {
+        jsonResponse({ res, statusNumber: 400, data: null, message: "Role doesn't exists" });
+    } 
+
     try {
         let counterId = await counterIdRepository.getByIdAndPeriod(COUNTER_ID, getYear, getMonth);
         let lastCounter = counterId === null ? 1 : counterId.toJSON().last_counter;
@@ -74,6 +79,9 @@ const createUser = async (req: Request, res: Response) => {
 }
 
 const updateUser = async (req: Request, res: Response) => {
+    if (ROLES.indexOf(req.body.role) < 0) {
+        jsonResponse({ res, statusNumber: 400, data: null, message: "Role doesn't exists" });
+    } 
     
     try {
         const currentUser = await userRepository.getById(req.params.userId);

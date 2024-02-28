@@ -1,8 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../connection/db";
 
-const User = sequelize.define("User", {
-    // Model attributes are defined here
+const User = sequelize.define('User', {
     id: {
         type: DataTypes.STRING(20),
         allowNull: false,
@@ -12,7 +11,7 @@ const User = sequelize.define("User", {
     username: {
         type: DataTypes.STRING(50),
         allowNull: false,
-        unique: true
+        unique: true,
     },
     password: {
         type: DataTypes.STRING(255),
@@ -30,6 +29,23 @@ const User = sequelize.define("User", {
     modelName: 'User', // We need to choose the model name
     tableName: 'mst_user',
     freezeTableName: false,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    defaultScope: {
+        attributes: { exclude: ['password'] },
+    },
+    scopes: {
+        withoutPassword: {
+            attributes: { exclude: ['password'] },
+        }
+    }
 });
+
+User.prototype.toJSON = function () {
+    var values = Object.assign({}, this.get());
+
+    delete values.password;
+    return values;
+}
 
 export default User;

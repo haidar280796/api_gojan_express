@@ -4,7 +4,7 @@ import userType from "../types/userTypes";
 
 const getAll = async () => {
     try {
-        const users = await User.findAll();
+        const users = await User.scope('withoutPassword').findAll();
         return users;
     } catch (error) {
         throw new Error(`${error}`);
@@ -25,9 +25,37 @@ const save = async (reqData: userType, t?: Transaction) => {
         const user = await User.create(reqData, {
             transaction: t
         });
-        return user;
+        return Promise.resolve(user);
     } catch (error) {
-        throw new Error(`${error}`);
+        return Promise.reject(error);
+    }
+}
+
+const update = async (userId: any, reqData: userType, t?: Transaction) => {
+    try {
+        const user = await User.update(reqData, {
+            where: {
+                id: userId
+            },
+            transaction: t
+        });
+        return Promise.resolve(user);
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const destroy = async (userId: any, t?: Transaction) => {
+    try {
+        const user = await User.destroy({
+            where: {
+                id: userId
+            },
+            transaction: t
+        });
+        return Promise.resolve(user);
+    } catch (error) {
+        return Promise.reject(error);
     }
 }
 
@@ -35,6 +63,8 @@ const userRepository = {
     getAll,
     getById,
     save,
+    update,
+    destroy
 }
 
 export default userRepository;

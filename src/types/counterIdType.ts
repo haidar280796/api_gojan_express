@@ -3,7 +3,7 @@ type counterIdType = {
     pyear: number | null,
     pmonth: number | null,
     prefix?: string | null,
-    last_counter: number | null,
+    last_counter: number,
     reset: boolean | null,
     createdAt?: string | null,
     updatedAt?: string | null,

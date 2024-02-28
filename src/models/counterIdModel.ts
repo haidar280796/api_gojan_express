@@ -1,8 +1,11 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../connection/db";
 
-const CounterId = sequelize.define("CounterId", {
-    // Model attributes are defined here
+// class CounterId extends Model {
+//     declare counter_id: string;
+// }
+
+const CounterId = sequelize.define('CounterId', {
     counter_id: {
         type: DataTypes.STRING(30),
         allowNull: false,
@@ -35,6 +38,8 @@ const CounterId = sequelize.define("CounterId", {
     modelName: 'CounterId', // We need to choose the model name
     tableName: 'mst_counter',
     freezeTableName: false,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
 });
 
 export default CounterId;

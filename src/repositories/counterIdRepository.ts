@@ -3,7 +3,7 @@ import counterIdType from "../types/counterIdType";
 
 const getByIdAndPeriod = async (counterId: string, pyear: number, pmonth: number) => {
     try {
-        const counter = await CounterId.findAll({
+        const counter = await CounterId.findOne({
             where: {
                 counter_id: counterId,
                 pyear: pyear,
@@ -27,13 +27,13 @@ const save = async (reqData: counterIdType) => {
 
 const update = async (reqData: counterIdType) => {
     try {
-        const counter = await CounterId.update({ last_counter: reqData.last_counter }, {
+        const counter = await CounterId.update({ last_counter: reqData.last_counter}, {
             where: {
-              counter_id: reqData.counter_id,
-              pyear: reqData.pyear,
-              pmonth: reqData.pmonth,
+                counter_id: reqData.counter_id,
+                pyear: reqData.pyear,
+                pmonth: reqData.pmonth,
             }
-          });
+        });
         return counter;
     } catch (error) {
         throw new Error(`${error}`);

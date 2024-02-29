@@ -10,18 +10,18 @@ const getByIdAndPeriod = async (counterId: string, pyear: number, pmonth: number
                 pmonth: pmonth
             }
         });
-        return counter;
+        return Promise.resolve(counter);
     } catch (error) {
-        throw new Error(`${error}`);
+        return Promise.reject(error);
     }
 }
 
 const save = async (reqData: counterIdType) => {
     try {
         const counter = await CounterId.create(reqData);
-        return counter;
+        return Promise.resolve(counter);
     } catch (error) {
-        throw new Error(`${error}`);
+        return Promise.reject(error);
     }
 }
 
@@ -34,9 +34,9 @@ const update = async (reqData: counterIdType) => {
                 pmonth: reqData.pmonth,
             }
         });
-        return counter;
+        return Promise.resolve(counter);
     } catch (error) {
-        throw new Error(`${error}`);
+        return Promise.reject(error);
     }
 }
 

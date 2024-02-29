@@ -11,6 +11,7 @@ const sequelize = new Sequelize(`${process.env.DATABASE_NAME}`, `${process.env.D
         acquire: 30000,
         idle: 10000,
     },
+    logging: false
 });
 
 sequelize.sync({ force: false })

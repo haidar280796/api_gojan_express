@@ -5,44 +5,41 @@ import userType from "../types/userTypes";
 import counterIdRepository from "../repositories/counterIdRepository";
 import { getMonth, getYear } from "../helpers/getPeriode";
 import { UniqueConstraintError } from "sequelize";
-import { COUNTER_ID_USER, COUNTER_PREFIX_USER, USER_ROLES } from "../constants/counterSetting";
+import { COUNTER_ID_CATEGORY, COUNTER_PREFIX_CATEGORY, USER_ROLES } from "../constants/counterSetting";
+import categoryRepository from "../repositories/categoryRepository";
 
-const getUsers = async (req: Request, res: Response) => {
+const getCategories = async (req: Request, res: Response) => {
     try {
-        const users = await userRepository.getAll();
-        return jsonResponse({ res, statusNumber: 200, data: users, message: null });
+        const categories = await categoryRepository.getAll();
+        return jsonResponse({ res, statusNumber: 200, data: categories, message: null });
     } catch (error) {
         return res.status(500).json({ message: 'Failed to fetch users' });
     }
 }
 
-const getUser = async (req: Request, res: Response) => {
+const getCategory = async (req: Request, res: Response) => {
     try {
-        const user = await userRepository.getById(req.params.userId);
-        if (!user) {
-            return jsonResponse({ res, statusNumber: 404, data: null, message: "User doesn't exists" });
+        const category = await categoryRepository.getById(req.params.userId);
+        if (!category) {
+            return jsonResponse({ res, statusNumber: 404, data: null, message: "Category doesn't exists" });
         }
 
-        jsonResponse({ res, statusNumber: 200, data: user, message: null });
+        jsonResponse({ res, statusNumber: 200, data: category, message: null });
     } catch (error) {
-        return res.status(500).json({ message: 'Failed to fetch users' });
+        return res.status(500).json({ message: 'Failed to fetch category' });
     }
 }
 
-const createUser = async (req: Request, res: Response) => {
-    if (USER_ROLES.indexOf(req.body.role) < 0) {
-        return jsonResponse({ res, statusNumber: 400, data: null, message: "Role doesn't exists" });
-    } 
-
+const createCategory = async (req: Request, res: Response) => {
     try {
-        let counterId = await counterIdRepository.getByIdAndPeriod(COUNTER_ID_USER, getYear, getMonth);
+        let counterId = await counterIdRepository.getByIdAndPeriod(COUNTER_ID_CATEGORY, getYear, getMonth);
         let lastCounter = counterId === null ? 1 : counterId.toJSON().last_counter;
 
         let dataCounter = {
-            counter_id: COUNTER_ID_USER,
+            counter_id: COUNTER_ID_CATEGORY,
             pyear: getYear,
             pmonth: getMonth,
-            prefix: COUNTER_PREFIX_USER,
+            prefix: COUNTER_PREFIX_CATEGORY,
             last_counter: lastCounter,
             reset: false,
         }
@@ -56,7 +53,7 @@ const createUser = async (req: Request, res: Response) => {
         }
 
         let userData: userType = {
-            id: COUNTER_PREFIX_USER + lastCounter.toString().padStart(5, '0'),
+            id: COUNTER_PREFIX_CATEGORY + lastCounter.toString().padStart(5, '0'),
             username: req.body.username,
             password: req.body.password,
             role: req.body.role,
@@ -72,7 +69,7 @@ const createUser = async (req: Request, res: Response) => {
     }
 }
 
-const updateUser = async (req: Request, res: Response) => {
+const updateCategory = async (req: Request, res: Response) => {
     if (USER_ROLES.indexOf(req.body.role) < 0) {
         return jsonResponse({ res, statusNumber: 400, data: null, message: "Role doesn't exists" });
     } 
@@ -100,7 +97,7 @@ const updateUser = async (req: Request, res: Response) => {
     }
 }
 
-const deleteUser = async (req: Request, res: Response) => {
+const deleteCategory = async (req: Request, res: Response) => {
     
     try {
         const currentUser = await userRepository.getById(req.params.userId);
@@ -115,12 +112,12 @@ const deleteUser = async (req: Request, res: Response) => {
     }
 }
 
-const userController = {
-    getUsers,
-    getUser,
-    createUser,
-    updateUser,
-    deleteUser
+const categoryController = {
+    getCategories,
+    getCategory,
+    createCategory,
+    updateCategory,
+    deleteCategory
 }
-export default userController;
+export default categoryController;
 

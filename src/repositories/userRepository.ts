@@ -5,7 +5,7 @@ import userType from "../types/userTypes";
 const getAll = async () => {
     try {
         const users = await User.scope('withoutPassword').findAll();
-        return users;
+        return Promise.resolve(users);
     } catch (error) {
         throw new Error(`${error}`);
     }
@@ -14,9 +14,9 @@ const getAll = async () => {
 const getById = async (userId: any) => {
     try {
         const user = await User.findByPk(userId);
-        return user;
+        return Promise.resolve(user);
     } catch (error) {
-        throw new Error(`${error}`);
+        return Promise.reject(error);
     }
 }
 
